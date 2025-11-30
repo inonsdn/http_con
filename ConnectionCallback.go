@@ -8,19 +8,19 @@ import (
 )
 
 const (
-	routeMethod_GET  = "GET"
-	routeMethod_POST = "POST"
+	RouteMethod_GET  = "GET"
+	RouteMethod_POST = "POST"
 )
 
 type HttpPath struct {
-	name     string
-	callback func(*gin.Context)
-	method   string
+	Name     string
+	Callback func(*gin.Context)
+	Method   string
 }
 
 type HttpGroupPath struct {
-	name  string
-	paths []HttpPath
+	Name  string
+	Paths []HttpPath
 }
 
 // `...` is struct tag that some lib can read it

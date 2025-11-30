@@ -15,8 +15,8 @@ func InitHandlerWithGroup(httpPathConfigs []HttpGroupPath) (*ConnectionHandler, 
 	route := gin.Default()
 	var err error
 	for _, httpGroupPath := range httpPathConfigs {
-		prefix := httpGroupPath.name
-		err = registerRoute(route, prefix, httpGroupPath.paths)
+		prefix := httpGroupPath.Name
+		err = registerRoute(route, prefix, httpGroupPath.Paths)
 
 		if err != nil {
 			break
@@ -33,12 +33,12 @@ func registerRoute(route *gin.Engine, groupPrefix string, paths []HttpPath) erro
 	var err error
 	for _, httpPath := range paths {
 
-		realPathName := fmt.Sprintf("%s%s", groupPrefix, httpPath.name)
+		realPathName := fmt.Sprintf("%s%s", groupPrefix, httpPath.Name)
 
-		if httpPath.method == routeMethod_GET {
-			route.GET(realPathName, httpPath.callback)
-		} else if httpPath.method == routeMethod_POST {
-			route.POST(realPathName, httpPath.callback)
+		if httpPath.Method == RouteMethod_GET {
+			route.GET(realPathName, httpPath.Callback)
+		} else if httpPath.Method == RouteMethod_POST {
+			route.POST(realPathName, httpPath.Callback)
 		} else {
 			err = fmt.Errorf("")
 		}
