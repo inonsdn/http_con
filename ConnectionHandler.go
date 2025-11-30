@@ -11,39 +11,20 @@ type ConnectionHandler struct {
 	sigChan chan int
 }
 
-func InitHandlerWithGroup(httpPathConfigs []HttpGroupPath) (*ConnectionHandler, error) {
+type RouteRegistration interface {
+	RegisterRoute(r *gin.Engine)
+}
+
+func NewHandler() *ConnectionHandler {
 	route := gin.Default()
-	var err error
-	for _, httpGroupPath := range httpPathConfigs {
-		prefix := httpGroupPath.Name
-		err = registerRoute(route, prefix, httpGroupPath.Paths)
-
-		if err != nil {
-			break
-		}
-	}
-
 	return &ConnectionHandler{
 		route:   route,
 		sigChan: make(chan int, 0),
-	}, err
+	}
 }
 
-func registerRoute(route *gin.Engine, groupPrefix string, paths []HttpPath) error {
-	var err error
-	for _, httpPath := range paths {
-
-		realPathName := fmt.Sprintf("%s%s", groupPrefix, httpPath.Name)
-
-		if httpPath.Method == RouteMethod_GET {
-			route.GET(realPathName, httpPath.Callback)
-		} else if httpPath.Method == RouteMethod_POST {
-			route.POST(realPathName, httpPath.Callback)
-		} else {
-			err = fmt.Errorf("")
-		}
-	}
-	return err
+func (c *ConnectionHandler) RegisterRoute(r RouteRegistration) {
+	r.RegisterRoute(c.route)
 }
 
 func (c *ConnectionHandler) WaitAndGetStatus() int {
